@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1785354382336",
+    "name": "Test User",
+    "email": "test@notes.ai",
+    "password": "$2a$10$D6dey1pkIf0Wv3gp6Qbb5uCe48MQIYc6iowL2jPMqQk533tji6reO",
+    "createdAt": "2026-07-29T19:46:22.336Z"
+  },
+  {
+    "id": "1785355149435",
+    "name": "Aditya Shah",
+    "email": "adityashah0989@gmail.com",
+    "password": "$2a$10$Qd/sSNhvVZ8IGqkgi0AQG.AsQpcw1MTTp2.IDy4dOf9borg.7UO12",
+    "createdAt": "2026-07-29T19:59:09.435Z"
+  }
+]

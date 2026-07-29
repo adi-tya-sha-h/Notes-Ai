@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes.ai</title>
     <link rel="stylesheet" href="style.css">
+    <!-- PDF.js for in-browser PDF text extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
 <body>
@@ -25,16 +27,20 @@
             </div>
             <div class="nav-center">
                 <div class="nav-content">
-                    <a class="active">Home</a>
-                    <a>My Notes</a>
-                    <a>Quiz</a>
-                    <a>History</a>
+                    <a class="active" data-nav="home">Home</a>
+                    <a data-nav="notes">My Notes</a>
+                    <a data-nav="quiz">Quiz</a>
+                    <a data-nav="saved">Saved</a>
                 </div>
             </div>
             <div class="nav-right">
-                <div class="auth-buttons">
-                    <button class="login">Login</button>
-                    <button class="signup">Signup</button>
+                <div class="auth-buttons" id="auth-buttons">
+                    <button class="login" id="open-login-btn">Login</button>
+                    <button class="signup" id="open-signup-btn">Signup</button>
+                </div>
+                <div class="user-info hidden" id="user-info">
+                    <span class="user-greeting" id="user-greeting"></span>
+                    <button class="logout-btn" id="logout-btn">Logout</button>
                 </div>
             </div>
         </div>
@@ -60,16 +66,73 @@
                         <div class="app-title">New Study Session</div>
                     </div>
                     <div class="app-body">
-                        <textarea id="raw-notes-input"
-                            placeholder="Paste your raw lecture notes, PDF text, or study topics here (minimum 100 words)..."></textarea>
+
+                        <!-- Input mode tabs -->
+                        <div class="input-tabs">
+                            <button class="input-tab active" id="tab-text" data-tab="text">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="17" y1="10" x2="3" y2="10" />
+                                    <line x1="21" y1="6" x2="3" y2="6" />
+                                    <line x1="21" y1="14" x2="3" y2="14" />
+                                    <line x1="17" y1="18" x2="3" y2="18" />
+                                </svg>
+                                Paste Text
+                            </button>
+                            <button class="input-tab" id="tab-pdf" data-tab="pdf">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                    <line x1="16" y1="17" x2="8" y2="17" />
+                                    <polyline points="10 9 9 9 8 9" />
+                                </svg>
+                                Upload PDF
+                            </button>
+                        </div>
+
+                        <!-- Panel: Paste Text -->
+                        <div id="panel-text">
+                            <textarea id="raw-notes-input"
+                                placeholder="Paste your raw lecture notes, PDF text, or study topics here (minimum 100 words)..."></textarea>
+                        </div>
+
+                        <!-- Panel: Upload PDF -->
+                        <div id="panel-pdf" class="hidden">
+                            <input type="file" id="pdf-file-input" accept=".pdf" hidden>
+                            <div class="pdf-dropzone" id="pdf-dropzone">
+                                <svg class="pdf-drop-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="12" y1="12" x2="12" y2="18" />
+                                    <line x1="9" y1="15" x2="15" y2="15" />
+                                </svg>
+                                <p class="pdf-drop-label">Drag &amp; drop your PDF here</p>
+                                <p class="pdf-drop-sub">or <button class="pdf-browse-btn" id="pdf-browse-btn">browse
+                                        file</button> &mdash; max 50 MB</p>
+                            </div>
+                            <div class="pdf-status hidden" id="pdf-status">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#27c93f"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                <span id="pdf-status-text"></span>
+                                <button class="pdf-clear-btn" id="pdf-clear-btn" title="Remove PDF">&times;</button>
+                            </div>
+                        </div>
+
                         <div class="app-footer">
                             <span class="char-count">0 characters</span>
                             <button id="generate-btn" class="generate-btn">
-                                <span>Upload Content</span>
+                                <span>Generate Notes &amp; Quiz</span>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="16 16 12 12 8 16"></polyline>
+                                    <line x1="12" y1="12" x2="12" y2="21"></line>
+                                    <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
                                 </svg>
                             </button>
                         </div>
@@ -79,29 +142,40 @@
                 <!-- Notes Output Card (hidden by default) -->
                 <div class="app-mockup results-card hidden" id="notes-card">
                     <div class="app-header">
-                        <div class="app-traffic-lights">
-                            <div class="app-red"></div>
-                            <div class="app-yellow"></div>
-                            <div class="app-green"></div>
+                        <div class="app-traffic-lights" id="notes-traffic">
+                            <div class="app-red" id="notes-red"></div>
+                            <div class="app-yellow" id="notes-yellow"></div>
+                            <div class="app-green" id="notes-green"></div>
                         </div>
                         <div class="app-title">Study Notes</div>
                     </div>
                     <div class="app-body markdown-body" id="notes-content">
                         <!-- Notes will be injected here -->
                     </div>
+                    <div class="notes-footer">
+                        <button id="save-notes-btn" class="generate-btn">
+                            <span>Save Notes</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                                <polyline points="17 21 17 13 7 13 7 21" />
+                                <polyline points="7 3 7 8 15 8" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Quiz Card (hidden by default) -->
                 <div class="app-mockup results-card hidden" id="quiz-card">
                     <div class="app-header">
-                        <div class="app-traffic-lights">
-                            <div class="app-red"></div>
-                            <div class="app-yellow"></div>
-                            <div class="app-green"></div>
+                        <div class="app-traffic-lights" id="quiz-traffic">
+                            <div class="app-red" id="quiz-red"></div>
+                            <div class="app-yellow" id="quiz-yellow"></div>
+                            <div class="app-green" id="quiz-green"></div>
                         </div>
                         <div class="app-title">Interactive Quiz</div>
                     </div>
-                    <div class="app-body">
+                    <div class="app-body" id="quiz-body">
                         <div id="quiz-questions">
                             <!-- Quiz questions will be injected here -->
                         </div>
@@ -110,6 +184,23 @@
                             <button id="submit-quiz-btn" class="generate-btn">
                                 <span>Submit Quiz</span>
                             </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Saved Items Card (hidden by default) -->
+                <div class="app-mockup results-card hidden" id="saved-card">
+                    <div class="app-header">
+                        <div class="app-traffic-lights" id="saved-traffic">
+                            <div class="app-red" id="saved-red"></div>
+                            <div class="app-yellow" id="saved-yellow"></div>
+                            <div class="app-green" id="saved-green"></div>
+                        </div>
+                        <div class="app-title">Saved Collection</div>
+                    </div>
+                    <div class="app-body" id="saved-body">
+                        <div id="saved-items-list" class="saved-items-list">
+                            <!-- Dynamically populated saved items -->
                         </div>
                     </div>
                 </div>
@@ -137,9 +228,72 @@
 
     <footer>
         <p>&copy; 2026 Notes.ai &mdash; Powered by Grok AI</p>
-        <p>Designed and Created by Lakhya</p>
-        <p>All rights reserved &copy;</p>
+        <p>all rights reserved by Lakhya</p>
     </footer>
+
+    <!-- ── Login Modal ──────────────────────────────────────────── -->
+    <div id="login-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <div class="modal-card" id="login-modal">
+            <button class="modal-close" id="login-close-btn" aria-label="Close">&times;</button>
+            <div class="modal-header">
+                <div class="modal-logo">Notes.ai</div>
+                <h2 id="login-title" class="modal-title">Welcome back</h2>
+                <p class="modal-subtitle">Sign in to your account</p>
+            </div>
+            <form id="login-form" class="modal-form" novalidate>
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required />
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"
+                        required />
+                </div>
+                <div id="login-error" class="modal-error hidden"></div>
+                <button type="submit" id="login-submit-btn" class="modal-submit-btn">
+                    <span>Sign In</span>
+                </button>
+            </form>
+            <p class="modal-switch">Don't have an account? <button id="go-to-signup" class="modal-link">Sign up</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- ── Signup Modal ─────────────────────────────────────────── -->
+    <div id="signup-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true"
+        aria-labelledby="signup-title">
+        <div class="modal-card" id="signup-modal">
+            <button class="modal-close" id="signup-close-btn" aria-label="Close">&times;</button>
+            <div class="modal-header">
+                <div class="modal-logo">Notes.ai</div>
+                <h2 id="signup-title" class="modal-title">Create account</h2>
+                <p class="modal-subtitle">Start learning smarter today</p>
+            </div>
+            <form id="signup-form" class="modal-form" novalidate>
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" placeholder="Your Name" autocomplete="name" required />
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="you@gmail.com" autocomplete="email" required />
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password <span class="label-hint">(min. 6 characters)</span></label>
+                    <input type="password" id="signup-password" placeholder="••••••••" autocomplete="new-password"
+                        required />
+                </div>
+                <div id="signup-error" class="modal-error hidden"></div>
+                <button type="submit" id="signup-submit-btn" class="modal-submit-btn">
+                    <span>Create Account</span>
+                </button>
+            </form>
+            <p class="modal-switch">Already have an account? <button id="go-to-login" class="modal-link">Sign
+                    in</button></p>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 

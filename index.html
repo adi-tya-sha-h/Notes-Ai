@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes.ai</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="navbar">
+            <div class="nav-left">
+                <div class="mac-window">
+                    <div class="traffic-lights">
+                        <div class="red"></div>
+                        <div class="yellow"></div>
+                        <div class="green"></div>
+                    </div>
+                </div>
+                <div class="logo">
+                    <span>Notes.ai</span>
+                </div>
+            </div>
+            <div class="nav-center">
+                <div class="nav-content">
+                    <a class="active">Home</a>
+                    <a>My Notes</a>
+                    <a>Quiz</a>
+                    <a>History</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="auth-buttons">
+                    <button class="login">Login</button>
+                    <button class="signup">Signup</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-container">
+                <span class="badge">Introducing Notes.ai 1.0</span>
+                <h1>Supercharge your learning with AI</h1>
+                <p class="subtitle">Paste your study materials, lecture transcripts, or article links. Get structured
+                    summaries and interactive quizzes to test your knowledge.</p>
+
+                <div id="error-container" class="hidden"></div>
+
+                <div class="app-mockup">
+                    <div class="app-header">
+                        <div class="app-traffic-lights">
+                            <div class="app-red"></div>
+                            <div class="app-yellow"></div>
+                            <div class="app-green"></div>
+                        </div>
+                        <div class="app-title">New Study Session</div>
+                    </div>
+                    <div class="app-body">
+                        <textarea id="raw-notes-input"
+                            placeholder="Paste your raw lecture notes, PDF text, or study topics here (minimum 100 words)..."></textarea>
+                        <div class="app-footer">
+                            <span class="char-count">0 characters</span>
+                            <button id="generate-btn" class="generate-btn">
+                                <span>Upload Content</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes Output Card (hidden by default) -->
+                <div class="app-mockup results-card hidden" id="notes-card">
+                    <div class="app-header">
+                        <div class="app-traffic-lights">
+                            <div class="app-red"></div>
+                            <div class="app-yellow"></div>
+                            <div class="app-green"></div>
+                        </div>
+                        <div class="app-title">Study Notes</div>
+                    </div>
+                    <div class="app-body markdown-body" id="notes-content">
+                        <!-- Notes will be injected here -->
+                    </div>
+                </div>
+
+                <!-- Quiz Card (hidden by default) -->
+                <div class="app-mockup results-card hidden" id="quiz-card">
+                    <div class="app-header">
+                        <div class="app-traffic-lights">
+                            <div class="app-red"></div>
+                            <div class="app-yellow"></div>
+                            <div class="app-green"></div>
+                        </div>
+                        <div class="app-title">Interactive Quiz</div>
+                    </div>
+                    <div class="app-body">
+                        <div id="quiz-questions">
+                            <!-- Quiz questions will be injected here -->
+                        </div>
+                        <div class="quiz-footer">
+                            <div id="quiz-score" class="hidden"></div>
+                            <button id="submit-quiz-btn" class="generate-btn">
+                                <span>Submit Quiz</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Smart Summaries</h3>
+                        <p>Get structured, easy-to-read bullet points highlighting key terms and core concepts.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3>Interactive Quizzes</h3>
+                        <p>Test your retention with instant, multiple-choice questions tailored to your notes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Instant Insights</h3>
+                        <p>Powered by advanced AI models to process complex topics in seconds.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Notes.ai &mdash; Powered by Grok AI</p>
+        <p>Designed and Created by Lakhya</p>
+        <p>All rights reserved &copy;</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>

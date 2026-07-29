@@ -362,9 +362,11 @@ document.addEventListener('DOMContentLoaded', () => {
         errorContainer.classList.add('hidden');
     }
 
+    const API_BASE = 'https://notes-ai-backend-1pcb.onrender.com';
+
     // API Call: Fetch Notes
     async function fetchNotes(text) {
-        const res = await fetch('http://localhost:3000/api/generate-notes', {
+        const res = await fetch(`${API_BASE}/api/generate-notes`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text })
@@ -378,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // API Call: Fetch Quiz
     async function fetchQuiz(text) {
-        const res = await fetch('http://localhost:3000/api/generate-quiz', {
+        const res = await fetch(`${API_BASE}/api/generate-quiz`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text })
@@ -1066,7 +1068,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setModalLoading(loginSubmitBtn, true, 'Sign In');
             try {
-                const res = await fetch('http://localhost:3000/api/auth/login', {
+                const res = await fetch(`${API_BASE}/api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -1104,7 +1106,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setModalLoading(signupSubmitBtn, true, 'Create Account');
             try {
-                const res = await fetch('http://localhost:3000/api/auth/register', {
+                const res = await fetch(`${API_BASE}/api/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, password })

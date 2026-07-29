@@ -16,15 +16,19 @@ Paste your notes, lecture text, or study material — get back structured, exam-
 - **Backend:** Node.js + Express
 - **AI Provider:** Groq API (Llama models) — fast, free-tier friendly
 
+
 ## Project Structure
+
+```text
 notes-ai/
 ├── index.html
 ├── style.css
 ├── script.js
 └── server/
-├── index.js
-├── .env (not committed — see setup below)
-└── package.json
+    ├── index.js
+    ├── .env            # Not committed (contains API keys) and will expire
+    └── package.json
+```
 
 ## Setup & Run Locally
 

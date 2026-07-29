@@ -3,7 +3,8 @@
 Paste your notes, lecture text, or study material — get back structured, exam-ready summaries and an interactive multiple-choice quiz to test yourself on the spot.
 
 ## Live Demo
-🚧 Not yet deployed — currently runs locally. Deployment coming soon (see Roadmap below).
+- Frontend: https://incandescent-puppy-51301b.netlify.app
+- Backend API: https://notes-ai-backend-1pcb.onrender.com
 
 ## Features
 - 📝 **AI-generated study notes** — clean markdown-style summaries with headings and bullet points
